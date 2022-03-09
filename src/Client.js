@@ -947,9 +947,19 @@ class Client extends EventEmitter {
         }
 
         return await this.pupPage.evaluate(async number => {
-            const result = await window.Store.QueryExist(number);
-            if (!result || result.wid === undefined) return null;
-            return result.wid;
+            try {
+
+                const result = await window.Store.QueryExist(number);
+                if (!result || result.wid === undefined) return null;
+                return result.wid;
+
+            } catch(err){
+
+                let result = await window.Store.Wap.queryExist(number);
+                if (result.jid === undefined)
+                    throw 'Número não cadastrado no whatsappweb';
+                return result.jid;
+            }
         }, number);
     }
 
