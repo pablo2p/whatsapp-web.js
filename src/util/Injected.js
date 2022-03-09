@@ -27,7 +27,7 @@ exports.ExposeStore = (moduleRaidStr) => {
     window.Store.MsgKey = window.mR.findModule((module) => module.default && module.default.fromString)[0].default;
     window.Store.MessageInfo = window.mR.findModule('sendQueryMsgInfo')[0];
     window.Store.OpaqueData = window.mR.findModule(module => module.default && module.default.createFromData)[0].default;
-    window.Store.QueryExist = window.mR.findModule(module => typeof module.default === 'function' && module.default.toString().includes('Should not reach queryExists MD'))[0].default;
+    window.Store.QueryExist = window.mR.findModule('queryExists')[0].queryExists;
     window.Store.QueryProduct = window.mR.findModule('queryProduct')[0];
     window.Store.QueryOrder = window.mR.findModule('queryOrder')[0];
     window.Store.SendClear = window.mR.findModule('sendClear')[0];
@@ -218,7 +218,7 @@ exports.LoadUtils = () => {
         const newMsgId = new window.Store.MsgKey({
             from: meUser,
             to: chat.id,
-            id: window.Store.genId(),
+            id: window.Store.MsgKey.newId(),
             participant: isMD && chat.id.isGroup() ? meUser : undefined,
             selfDir: 'out',
         });
