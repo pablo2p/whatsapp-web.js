@@ -14,7 +14,6 @@ exports.ExposeStore = (moduleRaidStr) => {
     window.Store.CryptoLib = window.mR.findModule('decryptE2EMedia')[0];
     window.Store.DownloadManager = window.mR.findModule('downloadManager')[0].downloadManager;
     window.Store.Features = window.mR.findModule('FEATURE_CHANGE_EVENT')[0].GK;
-    window.Store.genId = window.mR.findModule('newTag')[0].newTag;
     window.Store.GroupMetadata = window.mR.findModule((module) => module.default && module.default.handlePendingInvite)[0].default;
     window.Store.Invite = window.mR.findModule('sendJoinGroupViaInvite')[0];
     window.Store.InviteInfo = window.mR.findModule('sendQueryGroupInvite')[0];
@@ -34,7 +33,6 @@ exports.ExposeStore = (moduleRaidStr) => {
     window.Store.SendDelete = window.mR.findModule('sendDelete')[0];
     window.Store.SendMessage = window.mR.findModule('addAndSendMsgToChat')[0];
     window.Store.SendSeen = window.mR.findModule('sendSeen')[0];
-    window.Store.Sticker = window.mR.findModule('Sticker')[0].Sticker;
     window.Store.User = window.mR.findModule('getMaybeMeUser')[0];
     window.Store.UploadUtils = window.mR.findModule((module) => (module.default && module.default.encryptAndUpload) ? module.default : null)[0].default;
     window.Store.UserConstructor = window.mR.findModule((module) => (module.default && module.default.prototype && module.default.prototype.isServer && module.default.prototype.isUser) ? module.default : null)[0].default;
