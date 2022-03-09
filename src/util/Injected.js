@@ -71,6 +71,9 @@ exports.ExposeStore = (moduleRaidStr) => {
 };
 
 exports.LoadUtils = () => {
+    if(!window.Store.genId) {
+        window.Store.genId = window.Store.MsgKey.newId;
+    }
     window.WWebJS = {};
 
     window.WWebJS.sendSeen = async (chatId) => {
