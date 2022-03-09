@@ -955,7 +955,7 @@ class Client extends EventEmitter {
 
             } catch(err){
 
-                let result = await window.Store.Wap.queryExist(number);
+                let result = await window.Store?.Wap?.queryExist(number);
                 if (result.jid === undefined)
                     throw 'Número não cadastrado no whatsappweb';
                 return result.jid;
