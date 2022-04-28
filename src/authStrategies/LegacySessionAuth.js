@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-const BaseAuthStrategy = require('./BaseAuthStrategy');
+const BaseAuthStrategy = require("./BaseAuthStrategy");
 
 /**
  * Legacy session auth strategy
@@ -14,35 +14,40 @@ const BaseAuthStrategy = require('./BaseAuthStrategy');
  * @param {string} options.session.WAToken2
  */
 class LegacySessionAuth extends BaseAuthStrategy {
-    constructor({ session, restartOnAuthFail }={}) {
+    constructor({ session, restartOnAuthFail } = {}) {
         super();
         this.session = session;
         this.restartOnAuthFail = restartOnAuthFail;
     }
 
     async afterBrowserInitialized() {
-        if(this.session) {
-            await this.client.pupPage.evaluateOnNewDocument(session => {
-                if (document.referrer === 'https://whatsapp.com/') {
+        if (this.session) {
+            await this.client.pupPage.evaluateOnNewDocument((session) => {
+                if (document.referrer === "https://whatsapp.com/") {
                     localStorage.clear();
-                    localStorage.setItem('WABrowserId', session.WABrowserId);
-                    localStorage.setItem('WASecretBundle', session.WASecretBundle);
-                    localStorage.setItem('WAToken1', session.WAToken1);
-                    localStorage.setItem('WAToken2', session.WAToken2);
+                    localStorage.setItem("WABrowserId", session.WABrowserId);
+                    localStorage.setItem(
+                        "WASecretBundle",
+                        session.WASecretBundle
+                    );
+                    localStorage.setItem("WAToken1", session.WAToken1);
+                    localStorage.setItem("WAToken2", session.WAToken2);
+                    localStorage.setItem("last-wid", session.LastWid);
                 }
-  
-                localStorage.setItem('remember-me', 'true');
+
+                localStorage.setItem("remember-me", "true");
             }, this.session);
         }
     }
 
     async onAuthenticationNeeded() {
-        if(this.session) {
+        if (this.session) {
             this.session = null;
             return {
                 failed: true,
                 restart: this.restartOnAuthFail,
-                failureEventPayload: 'Unable to log in. Are the session details valid?'
+                failureEventPayload:
+                    "Unable to log in. Are the session details valid?",
             };
         }
 
@@ -54,17 +59,23 @@ class LegacySessionAuth extends BaseAuthStrategy {
             return window.Store.MDBackend;
         });
 
-        if(isMD) throw new Error('Authenticating via JSON session is not supported for MultiDevice-enabled WhatsApp accounts.');
+        if (isMD)
+            throw new Error(
+                "Authenticating via JSON session is not supported for MultiDevice-enabled WhatsApp accounts."
+            );
 
-        const localStorage = JSON.parse(await this.client.pupPage.evaluate(() => {
-            return JSON.stringify(window.localStorage);
-        }));
+        const localStorage = JSON.parse(
+            await this.client.pupPage.evaluate(() => {
+                return JSON.stringify(window.localStorage);
+            })
+        );
 
         return {
+            LastWid: localStorage["last-wid"],
             WABrowserId: localStorage.WABrowserId,
             WASecretBundle: localStorage.WASecretBundle,
             WAToken1: localStorage.WAToken1,
-            WAToken2: localStorage.WAToken2
+            WAToken2: localStorage.WAToken2,
         };
     }
 }
